@@ -1,0 +1,10 @@
+{
+  "name": "ollama-tools",
+  "displayName": "Ollama Local LLM Tools",
+  "description": "Query a local Ollama model, embed text, or compare a local model's answer against Claude's own — all against a real local Ollama instance, no cloud dependency for the query itself.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Richard Sardini"
+  },
+  "license": "MIT"
+}
