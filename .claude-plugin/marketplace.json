@@ -36,13 +36,13 @@
       "name": "hdl-tools",
       "source": "./plugins/hdl-tools",
       "displayName": "HDL Sim & Synth Tools",
-      "description": "Simulate Verilog with Icarus Verilog and synthesize with Yosys, reporting real gate counts and critical-path length.",
-      "version": "0.1.0",
+      "description": "Simulate Verilog with Icarus Verilog, synthesize with Yosys for real gate counts/critical-path/timing, and dump real VCD waveforms via GTKWave.",
+      "version": "0.2.0",
       "author": {
         "name": "Richard Sardini"
       },
       "license": "MIT",
-      "keywords": ["verilog", "yosys", "hdl", "synthesis", "eda"],
+      "keywords": ["verilog", "yosys", "hdl", "synthesis", "eda", "waveform", "gtkwave"],
       "category": "Development"
     }
   ]

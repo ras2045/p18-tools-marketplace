@@ -21,18 +21,26 @@ workflows existed in the community marketplace at the time this was built
   approximation (dominant-cell-type × path-length), not a real per-node
   static timing analysis.
 
-Both commands were verified live against a real design (`classify.v`, an
-8-bit byte classifier) before packaging: 256/256 simulation pass, a real
-507-cell / 9-level synthesis result matching prior documented results
-exactly, and a `--timing` estimate of 4.33 ns / ~231 MHz built from a
-mux2 delay (481.1 ps) independently recomputed from the raw Liberty LUT
-data, not just copied from a prior doc.
+- **`/hdl-tools:hdl-wave`** — runs a testbench and produces a real VCD
+  waveform dump, optionally opening it in GTKWave. Works even on
+  testbenches with no `$dumpfile`/`$dumpvars` — wraps the testbench in a
+  generated top module rather than editing the user's file.
+
+All three commands were verified live against a real design (`classify.v`,
+an 8-bit byte classifier) before packaging: 256/256 simulation pass, a
+real 507-cell / 9-level synthesis result matching prior documented results
+exactly, a `--timing` estimate of 4.33 ns / ~231 MHz built from a mux2
+delay (481.1 ps) independently recomputed from the raw Liberty LUT data,
+and a real 19,860-byte VCD with a real GTKWave process launched against it
+(confirmed via `pgrep`, then closed).
 
 ## Requirements
 
 - Python 3 on PATH (standard library only)
-- `iverilog` and `vvp` for `hdl-sim` (`sudo apt install iverilog`)
+- `iverilog` and `vvp` for `hdl-sim` and `hdl-wave` (`sudo apt install iverilog`)
 - `yosys` for `hdl-synth` (`sudo apt install yosys`)
+- `gtkwave` for `hdl-wave --open` (`sudo apt install gtkwave`), plus a
+  working X display
 
 ## Install
 
@@ -70,10 +78,12 @@ hdl-tools-plugin/
 ├── .claude-plugin/plugin.json
 ├── skills/
 │   ├── hdl-sim/SKILL.md
-│   └── hdl-synth/SKILL.md
+│   ├── hdl-synth/SKILL.md
+│   └── hdl-wave/SKILL.md
 └── scripts/
     ├── hdl_sim.py
     ├── hdl_synth.py
+    ├── hdl_wave.py
     └── sky130_avg_delays.json   # real sky130_fd_sc_hd average cell delays
 ```
 
