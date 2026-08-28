@@ -49,13 +49,13 @@
       "name": "bin-inspect",
       "source": "./plugins/bin-inspect",
       "displayName": "Binary File Inspector",
-      "description": "Real hex dump, SHA-256, Shannon entropy, ELF header, gzip-vs-geo-codec compression comparison, and objdump-based symbol listing/disassembly for any file.",
-      "version": "0.2.0",
+      "description": "Real hex dump, SHA-256, Shannon entropy, ELF header, compression comparison, objdump-based symbol listing/disassembly, and byte-level file diffing.",
+      "version": "0.3.0",
       "author": {
         "name": "Richard Sardini"
       },
       "license": "MIT",
-      "keywords": ["binary", "entropy", "hex-dump", "compression", "elf", "disassembly", "objdump"],
+      "keywords": ["binary", "entropy", "hex-dump", "compression", "elf", "disassembly", "objdump", "bindiff"],
       "category": "Development"
     },
     {
