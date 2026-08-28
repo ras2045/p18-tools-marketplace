@@ -1,20 +1,44 @@
 #!/usr/bin/env python3
 """Synthesize a Verilog module with Yosys and report real gate count + critical path.
-Usage: hdl_synth.py <design.v> <top_module_name>
+Usage: hdl_synth.py <design.v> <top_module_name> [--timing]
 """
+import json
 import re
 import shutil
 import subprocess
 import sys
 import os
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DELAYS_FILE = os.path.join(SCRIPT_DIR, "sky130_avg_delays.json")
+
+# Yosys generic-cell prefix -> nearest real sky130_fd_sc_hd cell, for the
+# --timing estimate. Approximate mappings (no exact sky130 equivalent):
+# $_ANDNOT_ (AND-NOT) approximated as nand2, $_ORNOT_ (OR-NOT) as nor2.
+CELL_MAP = {
+    "$_NOT_": "inv",
+    "$_NOR_": "nor2",
+    "$_ORNOT_": "nor2",
+    "$_NAND_": "nand2",
+    "$_ANDNOT_": "nand2",
+    "$_XOR_": "xor2",
+    "$_XNOR_": "xor2",
+    "$_AND_": "and2",
+    "$_OR_": "or2",
+    "$_MUX_": "mux2",
+}
+
 
 def main():
-    if len(sys.argv) != 3:
-        print("Usage: hdl_synth.py <design.v> <top_module_name>", file=sys.stderr)
+    args = sys.argv[1:]
+    want_timing = "--timing" in args
+    args = [a for a in args if a != "--timing"]
+
+    if len(args) != 2:
+        print("Usage: hdl_synth.py <design.v> <top_module_name> [--timing]", file=sys.stderr)
         sys.exit(1)
 
-    design, top = sys.argv[1], sys.argv[2]
+    design, top = args
     if not os.path.isfile(design):
         print(f"File not found: {design}", file=sys.stderr)
         sys.exit(1)
@@ -49,6 +73,48 @@ def main():
         print("cell breakdown:")
         for name, count in cell_breakdown.items():
             print(f"  {name}: {count}")
+
+    if want_timing:
+        print_timing_estimate(cell_breakdown, path_len)
+
+
+def print_timing_estimate(cell_breakdown, path_len):
+    print()
+    if path_len == "?":
+        print("timing estimate: unavailable (no critical-path length found)")
+        return
+
+    try:
+        delays = json.load(open(DELAYS_FILE))
+    except FileNotFoundError:
+        print(f"timing estimate: unavailable ({DELAYS_FILE} not found)")
+        return
+
+    mapped = [(CELL_MAP[name], int(count)) for name, count in cell_breakdown.items()
+              if name in CELL_MAP]
+    if not mapped:
+        print("timing estimate: unavailable (no logic cells matched the sky130 cell map — "
+              "flip-flops/wires only?)")
+        return
+
+    dominant_type, dominant_count = max(mapped, key=lambda t: t[1])
+    delay_ps = delays[dominant_type]
+    path_len_i = int(path_len)
+    total_ps = delay_ps * path_len_i
+    freq_mhz = 1e6 / total_ps if total_ps > 0 else 0.0
+
+    print("timing estimate (approximation, not real STA):")
+    print(f"  dominant logic-cell type on critical path (by total count in design): "
+          f"{dominant_type} ({dominant_count} instances)")
+    print(f"  real sky130_fd_sc_hd average delay for {dominant_type}: {delay_ps} ps "
+          f"(google/skywater-pdk-libs-sky130_fd_sc_hd, tt_025C_1v80)")
+    print(f"  estimate = critical path length ({path_len_i}) x {delay_ps} ps "
+          f"= {total_ps:.1f} ps ({total_ps / 1000:.2f} ns)")
+    print(f"  implied max frequency if run unpipelined: ~{freq_mhz:.1f} MHz")
+    print("  caveat: this assumes every level on the critical path is the same "
+          "dominant cell type — it is NOT a real per-node static timing analysis. "
+          "A real STA report would need the full sky130 Liberty file run through "
+          "OpenSTA or a proper `abc -liberty` synthesis flow.")
 
 
 if __name__ == "__main__":

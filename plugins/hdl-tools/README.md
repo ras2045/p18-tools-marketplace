@@ -15,11 +15,18 @@ workflows existed in the community marketplace at the time this was built
 - **`/hdl-tools:hdl-synth`** — synthesizes a module with Yosys
   (`synth -top <module>; stat; ltp`), reports the real total cell count,
   real cell-type breakdown, and real critical-path length in logic levels.
+  With `--timing`, also prints an approximate real-ns delay estimate using
+  real average per-cell delays measured from the actual SkyWater
+  `sky130_fd_sc_hd` Liberty timing tables — clearly labeled as an
+  approximation (dominant-cell-type × path-length), not a real per-node
+  static timing analysis.
 
 Both commands were verified live against a real design (`classify.v`, an
-8-bit byte classifier) before packaging: 256/256 simulation pass, and a
-real 507-cell / 9-level synthesis result matching prior documented results
-exactly.
+8-bit byte classifier) before packaging: 256/256 simulation pass, a real
+507-cell / 9-level synthesis result matching prior documented results
+exactly, and a `--timing` estimate of 4.33 ns / ~231 MHz built from a
+mux2 delay (481.1 ps) independently recomputed from the raw Liberty LUT
+data, not just copied from a prior doc.
 
 ## Requirements
 
@@ -47,13 +54,14 @@ Or via a marketplace:
 
 ## Honest limits
 
-`hdl-synth` reports gate count and critical-path *length* (logic levels),
-not real propagation delay in seconds — Yosys's generic synthesis targets
-an abstract standard-cell library, not a real fabricated process. Getting
-a real timing number requires real per-cell delay data for a specific PDK
-(e.g. SkyWater sky130) multiplied against the critical path, which this
-tool doesn't do automatically — don't treat "critical path: 9" as
-nanoseconds.
+`hdl-synth --timing` is a real but approximate estimate, not a static
+timing analysis: it assumes every level on the critical path is the same
+cell type (the design's most common logic cell), using one real average
+delay figure per cell type rather than tracing actual per-node delays
+along the path. A genuine per-node STA would need the full sky130 Liberty
+file run through OpenSTA or `abc -liberty`, which this tool does not do.
+Without `--timing`, `hdl-synth` reports only gate count and critical-path
+*length* (logic levels) — don't treat that number as nanoseconds.
 
 ## Structure
 
@@ -65,7 +73,8 @@ hdl-tools-plugin/
 │   └── hdl-synth/SKILL.md
 └── scripts/
     ├── hdl_sim.py
-    └── hdl_synth.py
+    ├── hdl_synth.py
+    └── sky130_avg_delays.json   # real sky130_fd_sc_hd average cell delays
 ```
 
 Both skills are `disable-model-invocation: true` — user-triggered slash

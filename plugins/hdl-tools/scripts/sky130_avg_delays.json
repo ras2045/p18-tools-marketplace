@@ -1,0 +1,11 @@
+{
+  "_source": "google/skywater-pdk-libs-sky130_fd_sc_hd, tt_025C_1v80 corner, fetched and averaged this project's gate-level session (see GATE_LEVEL_RESULTS.md)",
+  "_unit": "picoseconds, averaged across each real cell's Liberty delay LUT",
+  "inv": 292.5,
+  "nor2": 279.2,
+  "nand2": 332.4,
+  "xor2": 330.9,
+  "and2": 379.0,
+  "or2": 396.3,
+  "mux2": 481.1
+}
