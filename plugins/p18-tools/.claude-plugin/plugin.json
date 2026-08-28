@@ -1,0 +1,10 @@
+{
+  "name": "p18-tools",
+  "displayName": "P18 Geo Tools",
+  "description": "Real byte-pair geo compression and an offline tiered-confidence response cache, built and tested against real files and a real local LLM in the p18-frontend project.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Richard Sardini"
+  },
+  "license": "MIT"
+}
