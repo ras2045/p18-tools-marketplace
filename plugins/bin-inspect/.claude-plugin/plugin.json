@@ -1,0 +1,10 @@
+{
+  "name": "bin-inspect",
+  "displayName": "Binary File Inspector",
+  "description": "Real hex dump, SHA-256, Shannon entropy, ELF header, and honest gzip-vs-geo-codec compression comparison for any file.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Richard Sardini"
+  },
+  "license": "MIT"
+}

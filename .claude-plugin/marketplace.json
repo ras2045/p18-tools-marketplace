@@ -44,6 +44,19 @@
       "license": "MIT",
       "keywords": ["verilog", "yosys", "hdl", "synthesis", "eda", "waveform", "gtkwave"],
       "category": "Development"
+    },
+    {
+      "name": "bin-inspect",
+      "source": "./plugins/bin-inspect",
+      "displayName": "Binary File Inspector",
+      "description": "Real hex dump, SHA-256, Shannon entropy, ELF header, and honest gzip-vs-geo-codec compression comparison for any file.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Richard Sardini"
+      },
+      "license": "MIT",
+      "keywords": ["binary", "entropy", "hex-dump", "compression", "elf"],
+      "category": "Development"
     }
   ]
 }
