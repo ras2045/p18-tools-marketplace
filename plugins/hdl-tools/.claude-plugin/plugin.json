@@ -1,0 +1,10 @@
+{
+  "name": "hdl-tools",
+  "displayName": "HDL Sim & Synth Tools",
+  "description": "Simulate Verilog against a testbench with Icarus Verilog, and synthesize a module with Yosys to get real gate counts and critical-path length. No cloud dependency; runs local open-source EDA tools.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Richard Sardini"
+  },
+  "license": "MIT"
+}
