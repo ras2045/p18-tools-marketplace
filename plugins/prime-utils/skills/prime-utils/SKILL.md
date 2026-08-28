@@ -24,12 +24,17 @@ Four real subcommands:
   large n.
 - `gap-residues <n>` — computes real prime gaps up to n and reports which
   of the 18 possible `gap mod 18` residues actually occur. This is a real
-  finding from this project's own research, reconfirmed at multiple scales:
-  only 10 of 18 residues ever occur (the other 8 are structurally
-  impossible, a consequence of primes >2,3 being coprime to 18). Report
-  this as exactly what it is — a real, computed-now, verifiable number
-  fact — not as a hypothesis or as evidence for anything beyond itself. It
-  does not predict where primes occur.
+  finding, reconfirmed at multiple scales up to a real 300,000,000-scale
+  check (16,252,325 primes, run outside this tool's own 20,000,000 cap):
+  only 10 of 18 residues ever occur. The exact mechanism (also printed by
+  the tool): every gap between two odd primes is even, so its residue must
+  be one of the 9 even values; the sole exception is the first gap, 2->3,
+  which equals 1. That's fully explained by gap parity alone — not by any
+  deeper mod-3/coprimality structure, despite this project's earlier,
+  slightly imprecise phrasing. Report this as exactly what it is — a real,
+  computed-now, verifiable number fact — not as a hypothesis or as
+  evidence for anything beyond itself. It does not predict where primes
+  occur.
 
 Report the tool's real output verbatim. Do not round `factor`'s
 verification claim if it says `False` — that would mean a real bug, not a

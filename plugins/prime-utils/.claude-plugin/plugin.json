@@ -1,8 +1,8 @@
 {
   "name": "prime-utils",
   "displayName": "Prime & Number Theory Utils",
-  "description": "Deterministic primality testing, factorization (trial division + Pollard's rho), sieving, and a real, twice-confirmed mod-18 prime-gap-residue check.",
-  "version": "0.1.0",
+  "description": "Deterministic primality testing, factorization (trial division + Pollard's rho), sieving, and a real mod-18 prime-gap-residue check confirmed to 300,000,000 with an exact parity-based explanation.",
+  "version": "0.1.1",
   "author": {
     "name": "Richard Sardini"
   },

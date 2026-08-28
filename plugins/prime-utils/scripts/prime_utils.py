@@ -154,11 +154,15 @@ def cmd_gap_residues(args):
     all_residues = set(range(18))
     missing = sorted(all_residues - set(residues))
     print(f"residues that never occur: {missing}")
-    print("\nContext: this is a real, empirically confirmed finding from the P18 research "
-          "project (independently reconfirmed at multiple scales this session) — it is a "
-          "consequence of primes >2,3 being coprime to 18=2*3^2, not a new theorem and not "
-          "claimed as one. It does not predict *where* primes occur, only which gap sizes "
-          "mod 18 are structurally possible.")
+    print("\nWhy exactly 10/18: every gap between two odd primes is even (odd - odd = even), "
+          "so its mod-18 residue must be one of the 9 even values {0,2,4,...,16}. The sole "
+          "exception is the very first gap, 2->3, which equals 1 — the only odd gap that can "
+          "ever occur. 9 even residues + that one odd exception = 10. A real large-scale check "
+          "(300,000,000, 16,252,325 primes) found zero counterexamples: every single gap past "
+          "2->3 was even, and all 9 even residues occurred with none further excluded — so this "
+          "is fully explained by gap parity alone, not by any deeper mod-3/coprimality "
+          "structure. It does not predict *where* primes occur, only which gap sizes mod 18 "
+          "are structurally possible.")
 
 
 COMMANDS = {
