@@ -6,10 +6,16 @@ addressing and compression, packaged as an installable Claude Code plugin.
 ## What's real here
 
 - **`/p18-tools:geo-compress`** — a byte-pair Huffman compressor (canonical
-  codes, geo-sorted table, escape symbol for rare pairs). Tested this
-  session on a real 809,568-byte compiled binary (1.277:1) and a real
-  cache file of embedding data (2.246:1, beating gzip -9 on that data).
-  No network dependency.
+  codes, geo-sorted table, escape symbol for rare pairs). Tested on a real
+  809,568-byte compiled binary (1.277:1). On a real 13-pattern cache file
+  of embedding data it edged out gzip -9 by about 1% (2.246:1 vs 2.222:1),
+  but a follow-up test on an independent, freshly generated embedding set
+  (20 patterns, unrelated text, same embedding model) reversed that —
+  gzip won there (2.741:1 vs 2.493:1). **Conclusion: this codec does not
+  reliably beat gzip on embedding data** — the original result was a
+  near-tie specific to one file, not a generalizable property. Treat gzip
+  as the safer default; this codec's real, general behavior is "usually
+  loses to gzip, occasionally close." No network dependency.
 - **`/p18-tools:cache-lookup`** — a tiered-confidence offline response
   cache. A pattern needs 3 consistent real responses before it's trusted
   to fast-path; once activated, real measured lookup time was ~0.1s versus

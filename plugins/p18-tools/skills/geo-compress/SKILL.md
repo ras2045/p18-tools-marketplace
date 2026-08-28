@@ -21,8 +21,15 @@ the user just wants to know how well a file would compress, not to
 actually produce a compressed copy.
 
 Honest expectation to set for the user if they ask: this codec was built
-and tested this session on a real 809,568-byte compiled binary (1.277:1)
-and a real cache file of JSON-text embeddings (2.246:1, beating gzip on
-that specific data). Small files (well under ~1KB) often come out *larger*
-after compression — the table overhead dominates — this is real, expected
+and tested on a real 809,568-byte compiled binary (1.277:1). It edged out
+gzip -9 by about 1% on one real 13-pattern cache file of JSON-text
+embeddings (2.246:1 vs 2.222:1), but a follow-up test on an independent,
+freshly generated embedding set (20 patterns, unrelated content, same
+embedding model) reversed that — gzip won there (2.741:1 vs 2.493:1).
+**This codec does not reliably beat gzip on embedding data** — that
+result was a near-tie specific to one file, not a generalizable property.
+Tell the user gzip is the safer default; this codec's honest general
+behavior is "usually loses to gzip, occasionally close," not "wins on
+embeddings." Small files (well under ~1KB) often come out *larger* after
+compression — the table overhead dominates — this is real, expected
 behavior, not a bug, and the tool will report it honestly either way.

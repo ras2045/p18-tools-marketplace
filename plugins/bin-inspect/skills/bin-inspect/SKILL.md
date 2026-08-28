@@ -21,7 +21,9 @@ compressed, encrypted, or random; well below 8.0 means it has real
 exploitable structure), the hex preview, and the compression comparison.
 
 Honest expectation to set for the user: the bundled geo-pair codec loses
-to gzip on most general binary/executable data (as shown by the real
-comparison the tool prints) — it only wins on specific data shapes like
-embedding tables, which this tool will report honestly either way rather
-than favoring one result.
+to gzip on most general binary/executable data, and also on real
+embedding data — an initial ~1% edge on one specific 13-pattern file did
+not hold up on a follow-up test against an independent, freshly generated
+embedding set, where gzip won by a wider margin. There is no known data
+shape where this codec reliably beats gzip; report whichever tool
+actually wins on the file at hand rather than expecting a pattern.

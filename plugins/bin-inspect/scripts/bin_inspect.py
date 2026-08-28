@@ -82,10 +82,14 @@ def main():
             geo_ratio = size / len(geo) if geo else 0
             print(f"  geo-pair codec: {len(geo)} bytes ({geo_ratio:.3f}:1)")
             if geo_ratio > gz_ratio:
-                print("  -> geo codec wins on this file (uncommon — usually loses to gzip "
-                      "except on specific data shapes like embedding tables)")
+                print("  -> geo codec wins on this file (uncommon — it usually loses to or "
+                      "ties gzip; even on embedding-shaped data a real independent test "
+                      "found gzip winning more often than not, so this is not a reliable "
+                      "pattern to expect)")
             else:
-                print("  -> gzip wins on this file (typical/expected for general binary data)")
+                print("  -> gzip wins on this file (typical/expected for general binary data, "
+                      "including embedding data — an earlier near-tie result on one specific "
+                      "file did not hold up on independent data)")
         except Exception as e:
             print(f"  geo-pair codec: failed ({e})")
 

@@ -10,8 +10,8 @@
       "name": "p18-tools",
       "source": "./plugins/p18-tools",
       "displayName": "P18 Geo Tools",
-      "description": "Real byte-pair geo compression and an offline tiered-confidence response cache, built and tested against real files and a real local LLM.",
-      "version": "0.1.0",
+      "description": "Real byte-pair geo compression and an offline tiered-confidence response cache, built and tested against real files and a real local LLM. Note: the compressor usually loses to gzip, including on embedding data.",
+      "version": "0.1.1",
       "author": {
         "name": "Richard Sardini"
       },
@@ -50,7 +50,7 @@
       "source": "./plugins/bin-inspect",
       "displayName": "Binary File Inspector",
       "description": "Real hex dump, entropy, ELF header, compression comparison, disassembly, byte-level diffing, and multi-algorithm checksums for any file.",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "author": {
         "name": "Richard Sardini"
       },
