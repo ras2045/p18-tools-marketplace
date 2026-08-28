@@ -10,8 +10,8 @@
       "name": "p18-tools",
       "source": "./plugins/p18-tools",
       "displayName": "P18 Geo Tools",
-      "description": "Real byte-pair geo compression and an offline tiered-confidence response cache, built and tested against real files and a real local LLM. Note: the compressor usually loses to gzip, including on embedding data.",
-      "version": "0.1.1",
+      "description": "Real byte-pair geo compression (usually loses to gzip, including on embedding data) and an offline tiered-confidence response cache with export/import to share it across machines.",
+      "version": "0.2.0",
       "author": {
         "name": "Richard Sardini"
       },

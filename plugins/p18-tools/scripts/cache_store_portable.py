@@ -171,6 +171,55 @@ class PortableCacheStore:
             self.active_threshold = float(value)
             self._save()
 
+    def export_patterns(self, out_path):
+        """Write every pattern (full plain-float embeddings, not quantized) to a
+        portable JSON file — no compression, so it's inspectable and diffable,
+        and importable by another store regardless of that store's own format."""
+        with self.lock:
+            payload = {"patterns": self.patterns, "active_threshold": self.active_threshold}
+            with open(out_path, "w") as f:
+                json.dump(payload, f)
+            return len(self.patterns)
+
+    def _best_match_any(self, prompt_emb):
+        """Like find_pattern, but considers EVERY stored pattern including
+        abandoned ones — find_pattern deliberately skips abandoned patterns
+        for live cache lookups (they shouldn't serve hits), which is wrong
+        for deduplication: skipping them let a re-import of the same file
+        re-add a duplicate of an already-abandoned pattern (a real bug found
+        by testing this against real data before shipping)."""
+        best_sim = -1.0
+        for p in self.patterns:
+            sim = cosine(prompt_emb, p["prompt_emb"])
+            if sim > best_sim:
+                best_sim = sim
+        return best_sim
+
+    def import_patterns(self, in_path):
+        """Merge patterns from a JSON file produced by export_patterns (or any
+        store's plain-JSON format) into this store. A pattern is skipped if
+        an existing pattern's prompt embedding already matches at
+        MATCH_THRESHOLD (0.90), checked against ALL existing patterns
+        (including abandoned ones — see _best_match_any) so repeated imports
+        of the same file are idempotent. No fresh Ollama call needed; this
+        compares real stored embeddings directly. Real, useful case:
+        warm-start a new machine's cache from another session's
+        already-activated patterns instead of relearning from scratch.
+        Returns (added, skipped_as_duplicate)."""
+        with open(in_path) as f:
+            incoming = json.load(f).get("patterns", [])
+        added, skipped = 0, 0
+        with self.lock:
+            for p in incoming:
+                if self._best_match_any(p["prompt_emb"]) >= MATCH_THRESHOLD:
+                    skipped += 1
+                    continue
+                self.patterns.append(p)
+                added += 1
+            if added:
+                self._save()
+        return added, skipped
+
     def table(self):
         with self.lock:
             rows = []

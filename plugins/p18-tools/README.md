@@ -21,7 +21,17 @@ addressing and compression, packaged as an installable Claude Code plugin.
   to fast-path; once activated, real measured lookup time was ~0.1s versus
   the ~2 minutes a real local LLM call took to generate the answer being
   cached. Requires a local Ollama instance with `nomic-embed-text` pulled
-  (matches by real embedding similarity, not string matching).
+  (matches by real embedding similarity, not string matching). Also
+  supports `export`/`import` to move a learned cache between machines or
+  sessions — verified live with a real 13-pattern store: exported, merged
+  into a fresh store (13 added), re-imported twice more (idempotent, 0
+  added / 13 skipped both times), and merged into a 6-pattern partial
+  subset (correctly split 7 new / 6 duplicate). A real bug was found and
+  fixed during this testing: the first import implementation used the
+  live-lookup matcher for deduplication, which deliberately ignores
+  abandoned patterns — so re-importing the same file re-added a duplicate
+  of the one abandoned pattern every time. Fixed to check all patterns,
+  abandoned or not, when deduplicating.
 
 ## Requirements
 

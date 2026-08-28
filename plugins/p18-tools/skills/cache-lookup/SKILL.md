@@ -1,7 +1,7 @@
 ---
 name: cache-lookup
 description: Check or update an offline tiered-confidence response cache — instant answers for previously-seen prompts instead of a real model call. Use when the user wants to check if a query is cached, or wants to record a real answer into the cache for future reuse.
-argument-hint: "[check|learn|table] <store_file> [\"prompt\"] [\"response\"]"
+argument-hint: "[check|learn|table|export|import] <store_file> [\"prompt\"|output.json] [\"response\"]"
 disable-model-invocation: true
 ---
 
@@ -28,6 +28,17 @@ Three real subcommands:
   real content the user or another process already generated.
 - `table <store_file>` — lists every learned pattern and its real status
   (learning / activated / abandoned) and measured consistency.
+- `export <store_file> <output.json>` — writes every pattern (full
+  plain-float embeddings, not the quantized on-disk form) to a portable,
+  uncompressed JSON file, for sharing a learned cache to another
+  machine/session.
+- `import <store_file> <input.json>` — merges patterns from a file
+  produced by `export` into `store_file`. No Ollama call needed — dedup
+  compares the real embeddings already stored in each pattern (including
+  abandoned ones, so repeated imports of the same file are idempotent —
+  a real bug where they weren't was found and fixed before shipping).
+  Real use case: warm-start a new machine's cache from another session's
+  already-activated patterns instead of relearning from scratch.
 
 Report the tool's real JSON output plainly. Do not claim a prompt is
 cached, or invent a consistency score, if the tool didn't actually report
