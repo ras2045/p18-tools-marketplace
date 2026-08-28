@@ -1,8 +1,8 @@
 {
   "name": "bin-inspect",
   "displayName": "Binary File Inspector",
-  "description": "Real hex dump, SHA-256, Shannon entropy, ELF header, honest gzip-vs-geo-codec compression comparison, objdump-based symbol listing/disassembly, and byte-level file diffing.",
-  "version": "0.3.0",
+  "description": "Real hex dump, entropy, ELF header, compression comparison, disassembly, byte-level diffing, and multi-algorithm checksums (crc32/adler32/md5/sha1/sha256/sha512) for any file.",
+  "version": "0.4.0",
   "author": {
     "name": "Richard Sardini"
   },

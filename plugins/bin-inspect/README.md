@@ -24,6 +24,10 @@ community marketplace at the time this was built (checked against all
   from both files. No competing "bindiff"/"hexdiff"/"binary diff" plugin
   existed in the community marketplace at build time.
 
+- **`/bin-inspect:checksum`** — real crc32, adler32, md5, sha1, sha256,
+  and sha512 in one pass (Python `zlib`/`hashlib`, no external deps). No
+  competing "checksum" plugin existed at build time.
+
 Verified live against a real 1.66 MB ELF binary (`/usr/bin/gtkwave`):
 correct type detection, entropy 6.11 bits/byte, real gzip 2.518:1 vs. geo
 codec 1.433:1 (gzip wins, correctly reported as the expected/typical
@@ -37,7 +41,9 @@ x86-64 instructions. `bindiff` was verified against identical files
 (correctly reports identical), a real single-byte modification at a known
 offset (correctly isolates exactly offset 0x3e8), and files of different
 sizes (correctly reports the size delta and diffs only the common
-region).
+region). `checksum`'s md5/sha1/sha256/sha512 output was cross-checked
+against the real system `md5sum`/`sha1sum`/`sha256sum`/`sha512sum` on the
+same file and matched exactly.
 
 ## Requirements
 
@@ -61,11 +67,13 @@ bin-inspect-plugin/
 ├── skills/
 │   ├── bin-inspect/SKILL.md
 │   ├── disasm/SKILL.md
-│   └── bindiff/SKILL.md
+│   ├── bindiff/SKILL.md
+│   └── checksum/SKILL.md
 └── scripts/
     ├── bin_inspect.py       # entry point for bin-inspect
     ├── disasm.py            # entry point for disasm
     ├── bindiff.py           # entry point for bindiff
+    ├── checksum.py          # entry point for checksum
     ├── geo_pair_codec.py    # bundled from p18-tools
     └── wheel270_engine.py   # geo_pair_codec's dependency
 ```
